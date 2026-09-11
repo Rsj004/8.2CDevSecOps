@@ -12,16 +12,6 @@ pipeline {
             steps {
                 bat 'npm test || exit /b 0'
             }
-            post {
-                always {
-                    emailext(
-                        to: 'renetsusil@gmail.com',
-                        subject: "Test Stage - ${currentBuild.currentResult}",
-                        body: "Test stage status: ${currentBuild.currentResult}",
-                        attachLog: true
-                    )
-                }
-            }
         }
 
         stage('Generate Coverage Report') {
@@ -34,16 +24,17 @@ pipeline {
             steps {
                 bat 'npm audit || exit /b 0'
             }
-            post {
-                always {
-                    emailext(
-                        to: 'renetsusil@gmail.com',
-                        subject: "Security Scan - ${currentBuild.currentResult}",
-                        body: "Security scan status: ${currentBuild.currentResult}",
-                        attachLog: true
-                    )
-                }
-            }
+        }
+    }
+
+    post {
+        always {
+            emailext(
+                to: 'renetsusil@gmail.com',
+                subject: "Jenkins Build: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "Build status: ${currentBuild.currentResult}",
+                attachLog: true
+            )
         }
     }
 }
