@@ -28,13 +28,11 @@ pipeline {
     }
 
     post {
-        always {
-            emailext(
-                to: 'renetsusil@gmail.com',
-                subject: "Jenkins Build: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: "Build status: ${currentBuild.currentResult}",
-                attachLog: true
-            )
-        }
+    always {
+        mail to: 'renetsusil@gmail.com',
+             subject: "Jenkins Build: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+             body: "Build status: ${currentBuild.currentResult}"
+    }
+}
     }
 }
